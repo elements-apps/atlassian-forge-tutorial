@@ -1,5 +1,5 @@
 = Forge Tutorial
-Clément Garin <clement.garin@element-apps.com>; Cléfffment Garin <clement.garin@elemenfft-apps.com>
+Clément Garin <clement.garin@element-apps.com>
 v2.0, 2022-02-23
 :encoding: utf-8
 :toc: left
