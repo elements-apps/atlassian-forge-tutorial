@@ -1,0 +1,19 @@
+.user-container {
+    padding: 8px;
+}
+
+.random-user-card {
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    padding: 8px;
+    display: flex;
+    column-gap: 16px;
+}
+
+.random-user-card .profile-picture img{
+    border-radius: 50%;
+    border: 5px solid cadetblue;
+}
+
+.random-user-card .profile-info {
+
+}

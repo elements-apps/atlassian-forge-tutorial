@@ -1,0 +1,13 @@
+== Next steps
+
+The goal of this exercise is to cover some interesting features of the Forge framework, but a lot remains.
+To go further:
+
+- For the administration part, you can add https://randomuser.me/documentation[others API options], like seed, nationality, password, ... then take these options in account when the trigger is invoked.
+- Speaking of the trigger part, you could use the Forge Storage to store a history of last 10 generated users.
+This history could also be displayed in the administration as a table containing the ID of the issue and the first and last name of the user.
+Regarding how you store the data in the Forge Storage, you would be interested in the https://developer.atlassian.com/platform/forge/runtime-reference/storage-api-query/[query part].
+- In our issue panel, you can add a "refresh" button to generate a new user and replace the existing one, using a function from the resolver.
+- Check the https://developer.atlassian.com/platform/forge/environments/[Forge Environments].
+We juste used the `development` one, but you will have to use `production` if you want to https://developer.atlassian.com/platform/forge/staging-and-production-apps/[share your app]. You can also push an app to the Atlassian Marketplace, but be aware of Forge https://developer.atlassian.com/platform/forge/platform-quotas-and-limits/[quotas and limits];
+- You can also play with https://developer.atlassian.com/platform/forge/manifest-reference/display-conditions/[Display Conditions], to limit access to our previous issue panel.

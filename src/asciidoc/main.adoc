@@ -1,0 +1,50 @@
+= Forge Tutorial
+Clément Garin <clement.garin@element-apps.com>; Cléfffment Garin <clement.garin@elemenfft-apps.com>
+v2.0, 2022-02-23
+:encoding: utf-8
+:toc: left
+:description: An Atlassian Forge oriented exercise
+:sectanchors:
+:url-repo: https://github.com/elements-apps/atlassian-forge-tutorial
+:experimental:
+:imagesdir: ./assets
+:lang: en
+:numbered:
+:data-uri:
+:source-highlighter: highlight.js
+:icons: font
+:stylesheet: style.css
+
+_Feel free to open issues / pull requests in case of questions / errors on this exercise_
+
+[cols="h,1" cols="25h,~" ]
+|===
+|Duration        | Between 1 and 2 days
+|Skills        | Javascript / Typescript, React, REST API
+|License        a| image::license.png[link="http://creativecommons.org/licenses/by-nc-sa/4.0/"]
+|Repository        | {url-repo}
+|===
+
+**Changelog**
+
+[cols="25h,~"]
+|===
+|Date |Summary
+
+|2021-09-13
+|Document creation
+
+|2022-02-23
+|Updating deprecated scopes
+
+|===
+
+
+include::prerequisites.adoc[]
+
+include::about.adoc[]
+
+include::excercise.adoc[]
+
+include::next-steps.adoc[]
+

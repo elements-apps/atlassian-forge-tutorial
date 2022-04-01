@@ -1,0 +1,51 @@
+modules:
+  jira:issuePanel:
+    - key: random-user-hello-world-panel
+      resource: main
+      resolver:
+        function: resolver
+      viewportSize: medium
+      title: random-user
+      icon: https://developer.atlassian.com/platform/forge/images/issue-panel-icon.svg
+  jira:adminPage:
+    - key: random-user-administration
+      function: run-administration
+      title: Random user administration
+  trigger:
+    - key: issue-created-event
+      function: issue-created
+      events:
+        - avi:jira:created:issue
+  function:
+    - key: resolver
+      handler: index.handler
+    - key: run-administration
+      handler: administration.run
+    - key: issue-created
+      handler: trigger.run
+resources:
+  - key: main
+    path: static/hello-world/build
+    tunnel:
+      port: 3000
+app:
+  id: ari:cloud:ecosystem::app/2c189bff-68d2-475e-b617-4d0359b071d3
+permissions:
+  scopes:
+    - read:issue:jira
+    - read:issue-type:jira
+    - read:user:jira
+    - read:project:jira
+    - read:status:jira
+    - write:issue.property:jira
+    - read:issue.property:jira
+    - storage:app
+  content:
+    styles:
+      - unsafe-inline
+  external:
+    images:
+      - https://randomuser.me
+    fetch:
+      backend:
+        - https://randomuser.me

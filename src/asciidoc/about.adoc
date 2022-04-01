@@ -1,0 +1,34 @@
+== About this exercise
+
+The main purpose of this exercise is to explore the main Forge features by creating a simple Jira application that adds generated user information on Jira issues.
+
+[NOTE]
+====
+*And what about Confluence ?* +
+This first exercise only covers Jira, but many features are shared between Jira and Confluence (UI kit, triggers, ...).
+Currently, only `macro` are specific to Confluence.
+====
+
+**Here is the plan**: first thing to do is create an administration page, to allow users configuring our application.
+Once it's done, we will listen to issue creations in Jira by using the `trigger` mechanism.
+Then, when an issue is created, we will retrieve our application settings from the Forge `storage` and `fetch` a remote API to retrieve our user information and store them into the created issue.
+Finally, the information will be rendered inside the issue, using an `issue panel`.
+
+image::big-plan.png[The plan]
+
+The exercise is split into 4 parts:
+
+. Set up the Forge application;
+. Create the application administration;
+. Configure the issue creation trigger;
+. Display the user information in the issue;
+
+At the end of each part (except the Forge setup), you will be asked to implement a solution by yourself.
+However, a solution is available in this repository if needed.
+
+[TIP]
+====
+These exercises will require you to explore the https://developer.atlassian.com/platform/forge/[Forge documentation] to understand and discover Forge capabilities.
+If needed, don't hesitate to ask for help on the https://community.developer.atlassian.com/c/forge/45[Atlassian Developer Community].
+====
+

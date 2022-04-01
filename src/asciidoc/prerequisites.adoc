@@ -1,0 +1,20 @@
+== Prerequisites
+
+Before starting this exercise, be sure to:
+
+* Read and apply instructions from the https://developer.atlassian.com/platform/forge/getting-started/[Getting started page] on the Forge documentation website;
+* Follow at least one of these two tutorials:
+** https://developer.atlassian.com/platform/forge/build-a-hello-world-app-in-jira/[Build a Jira hello world app]
+** https://developer.atlassian.com/platform/forge/build-a-hello-world-app-in-confluence/[Build a Confluence hello world app]
+
+
+[IMPORTANT]
+====
+*At this point, we expect the following  to be the case:*
+
+* `Node.js` and `Docker` are installed on you computer;
+* The `Forge CLI` is globally installed, and you are logged in using your Atlassian API token;
+* You've tested the Forge `create`, `deploy`, `install` and `tunnel` commands at least once;
+* You've created an Atlassian Cloud developer site;
+
+====

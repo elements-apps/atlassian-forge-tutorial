@@ -1,0 +1,205 @@
+=== Listening for issue creations
+
+The next part of the exercise is listening for a new issue and attaching generated user information on it.
+Regarding Typescript, the previous configuration is reused, so no additional steps.
+
+==== A trigger?
+
+Triggers are functions called when a specific event occurs on an Atlassian product.
+For example your can listen for Confluence page creation or Jira mentions on issues.
+Once the event is triggered, Forge calls your function with all the details, and you can do your business.
+
+[TIP]
+.Resource
+====
+Documentation about Forge triggers can be found on the https://developer.atlassian.com/platform/forge/events-reference/[Forge documentation].
+====
+
+==== Declaring a Forge trigger
+
+Previously we used the `manifest.yml` to declare our administration.
+Guess what? Still the same way for triggers:
+
+[source, yaml]
+----
+modules:
+  jira:issuePanel:
+    - key: random-user-hello-world-panel
+      resource: main
+      resolver:
+        function: resolver
+      viewportSize: medium
+      title: random-user
+      icon: https://developer.atlassian.com/platform/forge/images/issue-panel-icon.svg
+  jira:adminPage:
+    - key: random-user-administration
+      function: run-administration
+      title: Random user administration
+  trigger: <2>
+    - key: issue-created-event <3>
+      function: issue-created
+      events:
+        - avi:jira:created:issue <4>
+  function:
+    - key: resolver
+      handler: index.handler
+    - key: run-administration
+      handler: administration.run
+    - key: issue-created <1>
+      handler: trigger.run
+resources:
+  - key: main
+    path: static/hello-world/build
+app:
+  id: ari:cloud:ecosystem::app/9513507c-5fa1-4e5e-8fee-a5d7ef17a07e
+permissions:
+  scopes:
+    - storage:app <5>
+    - read:issue:jira <6>
+    - read:issue-type:jira
+    - read:user:jira
+    - read:project:jira
+    - read:status:jira
+
+----
+
+<1> First, we define the function which will be called when the event occurs
+<2> We add the `trigger` section
+<3> and the entry for our associated function
+<4> Finally, we indicate the events we want to listen to
+<5> This permission was added for the administration part and will also be required for our trigger (nothing to add)
+<6> These permissions are required by the `avi:jira:created:issue` event. We will talk about permissions right after this part.
+
+Don't forget to create the `./src/trigger.ts` file (no need to add `.tsx` since the trigger doesn't return graphical content).
+You should also add the following content, to match our previous declaration in the `manifest.yml` file.
+
+[source, jsx]
+----
+export async function run(event, context) {
+    console.log('Here is the content of the event:');
+    console.log(JSON.stringify(event, null, 4));
+}
+----
+
+The `event` parameter contains information related to the received event.
+So content for a Confluence page created and a Jira issue created are not the same.
+
+Now, run `forge deploy` to declare the trigger, upgrade your installation using `forge install --upgrade` since permissions changed and run `forge tunnel` to watch executions and logs.
+Then, create a Jira project on your instance (or use an existing one), and create a new issue.
+The forge tunnel should display something like:
+
+[source, bash]
+----
+invocation: 805279f4da83daeb trigger.run
+INFO    11:49:25.739  805279f4da83daeb  Here is the content of the event:
+INFO    11:49:25.740  805279f4da83daeb  {
+    "issue": {
+        "id": "10046",
+        "key": "JIR-37",
+        "fields": {
+            "summary": "Trigger test !",
+            "issuetype": {
+                "self": "https://your-instance.atlassian.net/rest/api/2/issuetype/10001",
+                "id": "10001",
+                "description": "Functionality or a feature expressed as a user goal.",
+                "iconUrl": "...",
+                "name": "Story",
+                "subtask": false,
+                "avatarId": 10315,
+                "hierarchyLevel": 0
+            },
+            "creator": {
+                "accountId": "5bccf2f82bfc57158b2faa60"
+            },
+            "created": "2021-10-20T13:49:24.537+0200",
+            "project": {
+                "self": "https://elements-cga.atlassian.net/rest/api/2/project/10000",
+                "id": "10000",
+                "key": "JIR",
+                "name": "Jiraya",
+                "projectTypeKey": "software",
+                "simplified": false,
+                "avatarUrls": {...}
+            },
+            "reporter": {
+                "accountId": "5bccf2f82bfc57158b2faa60"
+            },
+            "assignee": null,
+            "updated": "2021-10-20T13:49:24.537+0200",
+            "status": {
+                "self": "https://your-instance.atlassian.net/rest/api/2/status/10000",
+                "description": "",
+                "iconUrl": "https://your-instance.atlassian.net/",
+                "name": "Backlog",
+                "id": "10000",
+                "statusCategory": {
+                    "self": "https://your-instance.atlassian.net/rest/api/2/statuscategory/2",
+                    "id": 2,
+                    "key": "new",
+                    "colorName": "blue-gray",
+                    "name": "To Do"
+                }
+            }
+        }
+    },
+    "atlassianId": "5bccf2f82bfc57158b2faa60",
+    "associatedUsers": [
+        {
+            "accountId": "5bccf2f82bfc57158b2faa60"
+        }
+    ]
+}
+----
+
+In these logs, we can see who created the issue and various fields with their content (id, key, project info, ...).
+
+==== About permissions
+
+Before coding the trigger part, we must talk about permissions in Forge apps.
+There are various type of permissions, as https://developer.atlassian.com/platform/forge/manifest-reference/permissions/[listed here]:
+
+* Permissions for using some Forge API, like the storage one (you used it earlier)
+* Permissions to access some product parts, especially when using product REST API
+* Permissions to access external contents. By default you can't talk with the entire internet, without asking user permissions
+
+Some of these permissions are displayed to the administrator when they are installing your app, others are displayed directly to the end user (if your request concerns personal data for example).
+
+
+Remember, when you add a new permission you **have to redeploy your app** (`forge deploy`) and **upgrade existing installations** using `forge install --upgrade` for changes to take effect.
+
+==== Now, exercise time
+
+Like for the administration, the implementation is up to you again!
+A possible implementation is available in `./typescript/random-user/src/trigger.ts` for help / comparing your solution.
+
+**What you must do:**
+
+When an issue is created, retrieve the settings in the forge storage.
+Then, request  https://randomuser.me/api to generate random user information.
+You must take in account the user choice concerning the gender.
+For more information about the gender parameter, check the https://randomuser.me/documentation[randomuser documentation].
+
+The goal is to store the information received from the API into the issue, by using **Jira Properties**, to retrieve it later.
+
+
+[IMPORTANT]
+====
+randomuser.me is a free service, however you can support project with https://randomuser.me/donate[a donation on the website].
+====
+
+**Resources:**
+
+* https://developer.atlassian.com/platform/forge/events-reference/jira/#issue-created[Jira created issue event] (with event data example)
+* https://developer.atlassian.com/platform/forge/runtime-reference/properties-api/[Jira issue properties API]
+* https://developer.atlassian.com/platform/forge/runtime-reference/fetch-api/[Calling internal & external API] (to request Cataas and Jira)
+* https://randomuser.me/documentation[randomuser documentation]
+
+
+**Additional notes:**
+
+* Again, watch out for permissions
+* Take in account that the storage can be empty if the user hasn't used the administration yet.
+* Don't forget to use `route` with `requestJira`
+* You can also work with Jira Properties through REST API
+
+Next step, Custom UI!

@@ -1,0 +1,25 @@
+name: Build tutorial and publish it to Github Page
+
+on:
+  push:
+    branches:
+    - main
+jobs:
+  adoc_build:
+    runs-on: ubuntu-latest
+    name: Convert and publish Asciidoc content
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Convert Asciidoc files
+      id: adocbuild
+      uses: avattathil/asciidoctor-action@master
+      with:
+          program: "asciidoctor -D ./public --backend=html5 -o index.html ./src/asciidoc/main.adoc"
+    - name: Deploy docs to ghpages
+      uses: peaceiris/actions-gh-pages@v3
+      with: 
+        deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+        publish_branch: gh-pages
+        publish_dir: ./public
+        cname: atlassian-forge-tutorial.elements-apps.com

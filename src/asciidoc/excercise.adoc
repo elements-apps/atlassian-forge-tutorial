@@ -1,0 +1,9 @@
+== Let's code!
+
+include::excercise/setup.adoc[]
+
+include::excercise/administration.adoc[]
+
+include::excercise/trigger.adoc[]
+
+include::excercise/issue-panel.adoc[]

@@ -1,0 +1,227 @@
+=== Create the administration
+
+Let's build our administration with UI kit.
+This part of Forge allow you to _declare_ graphical interface using components provided by Atlassian (and only them).
+And before starting, some setup (again).
+
+[TIP]
+.Resource
+====
+Documentation about UI kit (components, hooks, event) can be found https://developer.atlassian.com/platform/forge/ui-kit/[on the Forge documentation].
+====
+
+
+==== Adding Typescript
+
+To add Typescript in the UI Kit part of our project, we simply need to run:
+
+[source, bash]
+----
+npm install typescript @types/node @types/react
+----
+
+and add the `tsconfig.json` file in our app folder:
+
+[source, json]
+----
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2017",
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "lib": ["dom", "es2017"],
+    "types": ["node", "react"],
+    "baseUrl": "./",
+    "allowJs": true,
+    "jsx": "react",
+    "jsxFactory": "ForgeUI.createElement"
+  },
+  "include": ["./src/**/*"]
+}
+----
+
+==== Declaring our administration
+
+Now, we have to declare our administration in the `manifest.yml`.
+Before that, let's create the function responsible for rendering our administration.
+In `./src`, create the file `administration.tsx` with the following content:
+
+[source, jsx]
+----
+import ForgeUI, {AdminPage, render, Text} from '@forge/ui';
+
+const App = () => {
+    return (
+        <AdminPage> <1>
+            <Text>Hello, world!</Text>
+        </AdminPage>
+    );
+};
+
+export const run = render(
+    <App/>
+);
+----
+<1> Since we want to be displayed as an admin page, our root component have to be `<AdminPage>`.
+Each module has its own rooter component to use.
+
+Install the missing dependency (which contains UI kit)
+
+[source, bash]
+----
+npm install @forge/ui
+----
+
+And now, it's time to declare the `run` function from our `administration.tsx` file.
+Open the `manifest.yml` and add the following content:
+
+[source, yaml]
+----
+modules:
+  jira:issuePanel:
+    - key: random-user-hello-world-panel
+      resource: main
+      resolver:
+        function: resolver
+      viewportSize: medium
+      title: random-user
+      icon: https://developer.atlassian.com/platform/forge/images/issue-panel-icon.svg
+  jira:adminPage: <2>
+    - key: random-user-administration
+      function: run-administration
+      title: Random user administration
+  function:
+    - key: resolver
+      handler: index.handler
+    - key: run-administration <1>
+      handler: administration.run
+resources:
+  - key: main
+    path: static/hello-world/build
+app:
+  id: ari:cloud:ecosystem::app/9513507c-5fa1-4e5e-8fee-a5d7ef17a07e
+----
+
+<1> First thing to do is declaring our function
+<2> Then, we need to tell Forge we want to be displayed in a Jira administration page
+
+==== Time to deploy and test!
+
+Now, we should have a something working, let's test that.
+Since it's our first run, we have to execute the `forge deploy` command to upload our `manifest.yml` and Forge functions to Forge infrastructure.
+Then, let's install our app on a real Jira Cloud instance.
+Run the `forge install` command, select `Jira` and type your Atlassian Cloud instance URL.
+
+[source, bash]
+----
+? Select a product: Jira
+
+Enter your site. For example, your-domain.atlassian.net
+
+? Enter the site URL: your-instance.atlassian.net
+
+Installing your app onto an Atlassian site.
+Press Ctrl+C to cancel.
+
+Your app will be installed with the following scopes:
+- read:me
+
+? Do you want to continue? Yes
+
+✔ Install complete!
+
+Your app in the development environment is now installed in Jira on your-instance.atlassian.net
+----
+
+Now, navigate to your Jira instance, open settings (top-left menu) and select "Apps".
+You should see your app on the left side menu.
+Click on it, the app is loading and should greet you (and the world)
+
+image::app-menu.png[]
+
+==== Updating the app
+
+Instead of using `forge deploy` after editing our administration, we can use `forge tunnel`.
+This command will update your app each time a change is detected.
+Ensure Docker is running on your computer, then run the command:
+
+[source]
+----
+$ forge tunnel
+
+Tunnel redirects requests you make to your local machine. This occurs for any Atlassian site where your app is installed in the development environment. You will not see requests from other users.
+Press Ctrl+C to cancel.
+
+Checking Docker image... 100%
+Your Docker image is up to date.
+
+Reloading code...
+
+=== Running forge lint...
+No issues found.
+
+=== Bundling code...
+App code bundled.
+
+=== Snapshotting functions...
+No log output.
+
+App code reloaded.
+
+Listening for requests...
+----
+
+Now, if you refresh the page where your application is displayed, the Forge tunnel should detect the request:
+
+[source, bash]
+----
+invocation: 3e300f372fab08cb administration.run
+----
+
+Try adding a component to your `administration.tsx`:
+
+[source, jsx]
+----
+<AdminPage>
+    <Text>Hello, world!</Text>
+    <Text>No forge deploy needed!</Text>
+</AdminPage>
+----
+
+And refresh your page: the new line of text should appear.
+
+==== Real things start
+
+The setup is now over, it's time to implement our administration.
+You have to do this part by yourself, using the resources below.
+An implementation is available in the `./typescript/random-user` directory of this repository.
+You can use it to compare your solution or as a little help.
+
+**What you must do:**
+
+In the next part, we will use the https://randomuser.me[randomuser.me API] to generate random user information.
+Using URL parameters, it's possible to act on generated information.
+Our administration will simply allow our user to set the gender which will be generated.
+The API option values are `male` and `female`, but you must allow your user to also select a `random` option in your administration.
+The selected choice must be **loaded** and **saved** using the `Forge Storage` API, because in the next part, the trigger will rely on it.
+
+**Resources:**
+
+* https://developer.atlassian.com/platform/forge/ui-kit/[UI kit guide] (how to use components, hooks and events)
+* https://developer.atlassian.com/platform/forge/ui-kit-hooks-reference/[UI kit components] (available components - you cannot create your own)
+* https://developer.atlassian.com/platform/forge/runtime-reference/storage-api/[Storage API] (how to use)
+
+**Additional notes:**
+
+* Everything can be done in the `administration.tsx` file;
+* Don't forget to install `@forge/api` to use storage;
+* You can use any components you want (radio, dropdown, button group, ...) to collect user choice;
+* Check the tunnel output, some errors and associated fix will be displayed here;
+* To apply changes relative to Forge permissions, run `forge depoy` then `forge install --upgrade`;
+* If you use `console.log`, logs will be displayed in the Forge tunnel, and not the browser
+
+image::admin-mockup.png[]
+
+And now, it's trigger time.

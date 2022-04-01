@@ -1,0 +1,107 @@
+/* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
+
+/* Default asciidoc style framework - important */
+@import url(//asciidoctor.org/stylesheets/asciidoctor.css);
+
+:root {
+    --primarycolor: #0085D9;
+    --secondarycolor: #333333;
+    --sidebarbackground: #221645;
+}
+
+body {
+    font-family: sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: #0083D4;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Text styles */
+
+
+h2 {
+    color: var(--primarycolor) !important;
+}
+
+h3,
+h4,
+h5,
+h6 {
+    color: var(--secondarycolor);
+}
+
+.title {
+    color: (--primarycolor) !important;
+    font-style: normal;
+    font-weight: normal;
+}
+
+#toc.toc2 a:link {
+    color: #FFFFFF;
+}
+
+#toc.toc2 a:visited {
+    color: #FFFFFF;
+}
+
+#toc.toc2 a:hover {
+    color: #FDD170;
+}
+
+code {
+    background-color: #FDD170 !important;
+    font-weight: 900;
+}
+
+pre code {
+    background: #f7f7f8 !important;
+    border-radius: 4px;
+    padding: 1em;
+}
+
+.content .title {
+    color: #5EAF60 !important;
+    font-style: normal !important;
+    font-weight: 600 !important;
+    font-family: sans-serif !important;
+}
+
+/* Table styles */
+
+th {
+    background-color: var(--sidebarbackground);
+    color: #FFFFFF !important;
+}
+
+#toc.toc2 {
+    background-color: var(--sidebarbackground);
+    color: #FFFFFF;
+}
+
+#toc.toc2.a {
+    color: #FFFFFF;
+}
+
+#toctitle {
+    color: #FDD77B;
+}
+
+
+/* Responsiveness fixes */
+
+video {
+    max-width: 100%;
+}
+
+@media all and (max-width: 600px) {
+    table {
+        width: 55vw !important;
+        font-size: 3vw;
+    }
+}
