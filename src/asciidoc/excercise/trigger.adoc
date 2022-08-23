@@ -191,7 +191,7 @@ randomuser.me is a free service, however you can support project with https://ra
 
 * https://developer.atlassian.com/platform/forge/events-reference/jira/#issue-created[Jira created issue event] (with event data example)
 * https://developer.atlassian.com/platform/forge/runtime-reference/properties-api/[Jira issue properties API]
-* https://developer.atlassian.com/platform/forge/runtime-reference/fetch-api/[Calling internal & external API] (to request Cataas and Jira)
+* https://developer.atlassian.com/platform/forge/runtime-reference/fetch-api/[Calling internal & external API] (to request randomuser and Jira)
 * https://randomuser.me/documentation[randomuser documentation]
 
 
