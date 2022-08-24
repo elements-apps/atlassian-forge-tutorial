@@ -249,8 +249,23 @@ Let's start the server by running this command in `./static/hello-world`:
 npm start
 ----
 
+You might encounter a build error about the `buffer` package. This can be solved by installing it:
+
+[source, bash]
+----
+npm install buffer
+npm start
+----
+
 Now, each time we edit something in our Custom UI project, the assets will be regenerated and available at http://localhost:3000/.
-If you try to reach this address, you should receive this error: `TypeError: window.__bridge is undefined`.
+If you try to reach this address, you should receive this error:
+
+```
+Uncaught Error: 
+      Unable to establish a connection with the Custom UI bridge.
+      If you are trying to run your app locally, Forge apps only work in the context of Atlassian products. Refer to https://go.atlassian.com/forge-tunneling-with-custom-ui for how to tunnel when using a local development server.
+```
+
 It's expected: the `@forge/bridge` package only works on an Atlassian instance.
 
 Then, we must tell Forge tunnel to use our web server to serve our Custom UI content.
