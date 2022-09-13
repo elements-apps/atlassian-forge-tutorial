@@ -249,14 +249,6 @@ Let's start the server by running this command in `./static/hello-world`:
 npm start
 ----
 
-You might encounter a build error about the `buffer` package. This can be solved by installing it:
-
-[source, bash]
-----
-npm install buffer
-npm start
-----
-
 Now, each time we edit something in our Custom UI project, the assets will be regenerated and available at http://localhost:3000/.
 If you try to reach this address, you should receive this error:
 
