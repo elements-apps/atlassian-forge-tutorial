@@ -155,7 +155,7 @@ This command will update your app each time a change is detected.
 Ensure Docker is running on your computer, then run the command:
 
 [source]
----
+----
 $ forge tunnel
 
 Tunnel redirects requests you make to your local machine. This occurs for any Atlassian site where your app is installed in the development environment. You will not see requests from other users.
